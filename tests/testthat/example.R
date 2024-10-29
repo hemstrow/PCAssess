@@ -5,4 +5,5 @@ test_that("this is an example test",{
 
   expect_true(test_fun("cat", "dog") == "These aren't numbers.")
   expect_true(test_fun("dog", "cat") == "These aren't numbers.")
+  expect_true(test_fun(c("dog", 2), "cat") == "These aren't numbers.")
 })
