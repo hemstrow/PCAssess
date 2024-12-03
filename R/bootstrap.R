@@ -5,18 +5,26 @@
 #' @param x Genetic data formatted as single numbers indicated genotype, where
 #'   0 and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns
 #'   are individuals
+#' @param facet character. Categorical variable by which the data was broken up e.g., population, treatment
+#' @param n numeric. Number of bootstraps/permutations to run
+#' @param fst_cut numeric, default 0.95. Cut-off used to select highest fst loci.
+#' @param par NOTE: do we still use this?
+#' @param store_pca If TRUE, returns the raw PCA
 #'
-#' @return Describe what the function returns to the user.
 #'
-#' @references
-#' # list the citations
+#' @return a list containing: null distribution of the F-statistic observed values, the observed F-statistic, and the p-values from PCA permutation testing
+#'
+#' @references Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of
+#'  principal components: a new method for the analysis of genetically
+#'  structured populations. BMC Genet 11, 94 (2010).
+#'  \url{https://doi.org/10.1186}
 #'
 #' @author William Hemstrom
-#'
 #' @author Andy Lee
 #'
 #' @examples
 #' # provide example code here
+#' run_bootstrapping(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
 #'
 #'
 #' @export
@@ -39,6 +47,31 @@ run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca
 }
 
 #' @export
+
+
+#' Plot PCA boostrapping results
+#'
+#' Plots results from PCA boostrap/permutation testing
+#'
+#' @param x a list containing the null distribution, observed values, and p-vaules from PCA permutation testing
+#' @param n number of bootstrap/permuation to plot
+#'
+#' @return a ggplot of the null distribution of F-statistic and observed F-statistic from PCA permutation testing.
+#'  if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of bootstrapped/permuted PCAs
+#'
+#' @references
+#' # list the citations
+#'
+#' @author William Hemstrom
+#' @author Andy Lee
+#'
+#' @examples
+#' # plot observed PCA and 100 bootstraps/permutations
+#' plot_boot_res(boot_res, 100)
+#'
+#' # plot only the observed PCA
+#' plot_boot_res(boot_res, 0)
+#'
 plot_boot_res <- function(boot_res, n_boot_pcas = 1){
 
   #=======result distribution plot, always make this=======
@@ -102,3 +135,5 @@ plot_boot_res <- function(boot_res, n_boot_pcas = 1){
                                                                       1*(1/(n_boot_pcas + 2)))))
 
 }
+#' @export
+#'
