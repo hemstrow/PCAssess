@@ -9,21 +9,33 @@ run_bootstrapping(x, facet, n, fst_cut = 0.95, par = FALSE, store_pca = FALSE)
 \arguments{
 \item{x}{Genetic data formatted as single numbers indicated genotype, where
 0 and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns
-are individuals}
+are individuals.}
+
+\item{facet}{character. Categorical variable by which the data was broken up e.g., population, treatment.}
+
+\item{n}{numeric. Number of bootstraps/permutations to run.}
+
+\item{fst_cut}{numeric, default 0.95. Cut-off used to select highest fst loci.}
+
+\item{par}{NOTE: do we still use this?}
+
+\item{store_pca}{logical, default FALSE. If TRUE, returns the raw PCA.}
 }
 \value{
-Describe what the function returns to the user.
+a list containing: null distribution of the F-statistic observed values, the observed F-statistic, and the p-values from PCA permutation testing
 }
 \description{
 Runs the full PCA boostrap/permutation testing pipeline using genetic data.
 }
 \examples{
 # provide example code here
-
-
+run_bootstrapping(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
 }
 \references{
-# list the citations
+Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of
+ principal components: a new method for the analysis of genetically
+ structured populations. BMC Genet 11, 94 (2010).
+ \url{https://doi.org/10.1186}
 }
 \author{
 William Hemstrom

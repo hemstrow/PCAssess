@@ -171,20 +171,34 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 #' @export
 prep_as_from_sn <- function(x, facet){
   browser()
-  samps <- colnames(x)
+  .tab_func <- function(x){
+    x <- data.table::melt(data.table::transpose(x, keep.names = "samp"), id.vars = "samp") # transpose and melt
+    data.table::set(x, j = "vf", value = facet[as.numeric(x$samp)])
+
+    gmat <- data.table::dcast(data.table::setDT(x), variable + vf ~ value, value.var='value', length) # cast
+
+    ho <- gmat$`1`/(gmat$`0` + gmat$`2`)
+
+    amat <- gmat[,.(variable, vf)]
+    amat$`0` <- gmat$`0`*2 + gmat$`1`
+    amat$`1` <- gmat$`2`*2 + gmat$`1`
+
+    gmat$`NA` <- NULL
+  }
+
+
+  # loop to save memory if large
+  max_rows <- 100000000 # about 1.5G of storage for the big melt
+  max_snps <- ceiling(max_rows/ncol(x)) # max snps tolerable at once
+  n_iters <- ceiling(nrow(x)/max_snps)
+  titer <- 1
+
+
   colnames(x) <- as.character(1:ncol(x))
-  x <- data.table::melt(data.table::transpose(x, keep.names = "samp"), id.vars = "samp") # transpose and melt
-  data.table::set(x, j = "vf", value = facet[as.numeric(x$samp)])
 
-  gmat <- data.table::dcast(data.table::setDT(x), variable + vf ~ value, value.var='value', length) # cast
 
-  ho <- gmat$`1`/(gmat$`0` + gmat$`2`)
 
-  amat <- gmat[,.(variable, vf)]
-  amat$`0` <- gmat$`0`*2 + gmat$`1`
-  amat$`1` <- gmat$`2`*2 + gmat$`1`
 
-  gmat$`NA` <- NULL
 
   return(list(gmat = gmat, amat = amat, ho = ho))
 }

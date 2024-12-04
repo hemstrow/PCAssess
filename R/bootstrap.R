@@ -4,12 +4,12 @@
 #'
 #' @param x Genetic data formatted as single numbers indicated genotype, where
 #'   0 and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns
-#'   are individuals
-#' @param facet character. Categorical variable by which the data was broken up e.g., population, treatment
-#' @param n numeric. Number of bootstraps/permutations to run
+#'   are individuals.
+#' @param facet character. Categorical variable by which the data was broken up e.g., population, treatment.
+#' @param n numeric. Number of bootstraps/permutations to run.
 #' @param fst_cut numeric, default 0.95. Cut-off used to select highest fst loci.
 #' @param par NOTE: do we still use this?
-#' @param store_pca If TRUE, returns the raw PCA
+#' @param store_pca logical, default FALSE. If TRUE, returns the raw PCA.
 #'
 #'
 #' @return a list containing: null distribution of the F-statistic observed values, the observed F-statistic, and the p-values from PCA permutation testing
@@ -22,12 +22,10 @@
 #' @author William Hemstrom
 #' @author Andy Lee
 #'
+#' @export
 #' @examples
 #' # provide example code here
 #' run_bootstrapping(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
-#'
-#'
-#' @export
 run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
   x_as <- .prep_boots(x, facet, n)
   real_x <- generate_summary_stats(as = x_as$real_as, genotypes = x, facet = facet, fst_cut = fst_cut, store_pca = store_pca)
@@ -46,9 +44,6 @@ run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca
   }
 }
 
-#' @export
-
-
 #' Plot PCA boostrapping results
 #'
 #' Plots results from PCA boostrap/permutation testing
@@ -64,6 +59,8 @@ run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca
 #'
 #' @author William Hemstrom
 #' @author Andy Lee
+#'
+#' @export
 #'
 #' @examples
 #' # plot observed PCA and 100 bootstraps/permutations
