@@ -27,6 +27,25 @@
 #' # provide example code here
 #' run_bootstrapping(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
 run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
+  #===============sanity checks===================
+  msg <- character()
+  warn <- character()
+
+  problem <- FALSE
+  if(problem){
+    msg <- c(msg, "Ee have a new problem.\n")
+  }
+
+
+  if(length(msg) > 0){
+    stop(msg)
+  }
+
+  if(length(warn) > 0){
+    warning(warn)
+  }
+
+  #===============run the permutation=============
   x_as <- .prep_boots(x, facet, n)
   real_x <- generate_summary_stats(as = x_as$real_as, genotypes = x, facet = facet, fst_cut = fst_cut, store_pca = store_pca)
   boots_x <- .do_boots(x_as$boot_as, genotypes = x, par = par, fst_cut = fst_cut, store_pca = store_pca)
