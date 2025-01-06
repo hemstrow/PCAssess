@@ -1,8 +1,8 @@
-#'Deschutes stickleback example snpRdata.
+#'monarch butterfly example dataset
 #'
-#'A dataset containing genotypes at 100 SNP loci for 100 Three-spined
-#'Stickleback collected in 2015 from several locations in the Deschutes River,
-#'Oregon, USA. For more information, see Hemstrom et al (in prep).
+#'A dataset containing genotypes at XXX SNP loci for XXX Monarch Butterflies
+#'collected in XXX from several locations across North America,
+#'For more information, see Hemstrom et al (2022).
 #'
 #'Stored in the snpRdata object class. See \code{\link{import.snpR.data}} for
 #'details.
@@ -11,8 +11,6 @@
 #'site (e.g. "CC" or "GT"). Each SNP occupies one row, each sample occupies on
 #'column. Missing data coded as "NN".
 #'
-#'Sample and snp metadata can be found in the sample.meta and snp.meta sockets,
-#'respectively.
 #'
-#'@references Hemstrom et al (in prep)
+#'@references Hemstrom et al (2022). Molecular Ecology. https://doi.org/10.1111/mec.16592
 "mon_sn"

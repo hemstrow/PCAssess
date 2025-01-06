@@ -3,7 +3,7 @@
 \docType{data}
 \name{mon_sn}
 \alias{mon_sn}
-\title{Deschutes stickleback example snpRdata.}
+\title{monarch butterfly example dataset}
 \format{
 An object of class \code{data.frame} with 17715 rows and 84 columns.
 }
@@ -11,9 +11,9 @@ An object of class \code{data.frame} with 17715 rows and 84 columns.
 mon_sn
 }
 \description{
-A dataset containing genotypes at 100 SNP loci for 100 Three-spined
-Stickleback collected in 2015 from several locations in the Deschutes River,
-Oregon, USA. For more information, see Hemstrom et al (in prep).
+A dataset containing genotypes at XXX SNP loci for XXX Monarch Butterflies
+collected in XXX from several locations across North America,
+For more information, see Hemstrom et al (2022).
 }
 \details{
 Stored in the snpRdata object class. See \code{\link{import.snpR.data}} for
@@ -22,11 +22,8 @@ details.
 Genotypes noted as two characters representing bases sequenced at a specific
 site (e.g. "CC" or "GT"). Each SNP occupies one row, each sample occupies on
 column. Missing data coded as "NN".
-
-Sample and snp metadata can be found in the sample.meta and snp.meta sockets,
-respectively.
 }
 \references{
-Hemstrom et al (in prep)
+Hemstrom et al (2022). Molecular Ecology. https://doi.org/10.1111/mec.16592
 }
 \keyword{datasets}

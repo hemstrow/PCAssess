@@ -214,6 +214,7 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 #'   be unique.
 #' @param facet character vector noting population inform for each
 #'   individual sample.
+#'
 #' @author William Hemstrom
 #' @author Andy Lee
 #'
@@ -246,10 +247,5 @@ prep_as_from_sn <- function(x, facet){
 
 
   colnames(x) <- as.character(1:ncol(x))
-
-
-
-
-
   return(list(gmat = gmat, amat = amat, ho = ho))
 }
