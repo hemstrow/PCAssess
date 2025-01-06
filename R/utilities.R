@@ -15,6 +15,9 @@
 #' @author William Hemstrom
 #' @author Andy Lee
 #'
+#' @examples
+#' #global_fst(mon_sn)
+#'
 #' @export
 global_fst <- function(x, ac_cols = c("0", "1")){
   ac_cols <- ac_cols[which(ac_cols %in% colnames(x))]
@@ -96,7 +99,7 @@ global_fst <- function(x, ac_cols = c("0", "1")){
 #'
 #' @examples
 #' # example code, generate a smartPCA
-#' quick_smartPCA(stickSNPs)
+#' # quick_smartPCA(mon_sn)
 
 quick_smartPCA <- function(sn){
   ms <- colMeans(sn, na.rm = TRUE)
@@ -127,7 +130,7 @@ quick_smartPCA <- function(sn){
 #' @param facet character vector noting population informtion for each
 #'   inidivudal sample.
 #' @param ac_cols character, default c("0", "1"). Column names for the two
-#'   alleles in as.
+#'   alleles in 'as' format.
 #' @param fst_cut numeric, default 0.95. The Fst quantile above which to label
 #'   loci as high-Fst.
 #' @param store_pca logical, default FALSE. If TRUE, PCAs for both all and high-
@@ -141,7 +144,7 @@ quick_smartPCA <- function(sn){
 #'
 #' @examples
 #' #Generate summary statistics
-#' generate_summary_stats(MON, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
+#' generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), fst_cut = .95,
                                    store_pca = FALSE){
   fst <- global_fst(as, ac_cols)
@@ -187,7 +190,7 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
 #' @author Andy Lee
 #'
 #' @export
-#' @examples #example
+#' @examples # get_p_values(observed, null)
 #'
 get_p_values <- function(observed, null, h0 = c("less", "greater")){
   ec_dists <- lapply(null, ecdf)
@@ -204,7 +207,7 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 }
 
 
-#' Prepare data in as format from data in sn format
+#' Prepare data in 'as' format from data in 'sn' format
 #' @param x genotypic data, formatted with genotypes as 0/1/2 for the
 #'   homozygous ref/major, heterozygous, and homozygous alt/minor, respectively.
 #'   Each row must be one locus, each column one individual. Column names must
@@ -215,7 +218,7 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 #' @author Andy Lee
 #'
 #' @export
-#' @examples #example
+#' @examples # prep_as_from_sn(mon_sn, facet="populations" )
 
 prep_as_from_sn <- function(x, facet){
   browser()

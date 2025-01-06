@@ -21,7 +21,7 @@ Generate a raw smartPCA
 }
 \examples{
 # example code, generate a smartPCA
-quick_smartPCA(stickSNPs)
+# quick_smartPCA(mon_sn)
 }
 \author{
 William Hemstrom

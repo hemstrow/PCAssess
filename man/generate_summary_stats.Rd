@@ -30,7 +30,7 @@ be unique.}
 inidivudal sample.}
 
 \item{ac_cols}{character, default c("0", "1"). Column names for the two
-alleles in as.}
+alleles in 'as' format.}
 
 \item{fst_cut}{numeric, default 0.95. The Fst quantile above which to label
 loci as high-Fst.}
@@ -43,7 +43,7 @@ Generate summary statistics
 }
 \examples{
 #Generate summary statistics
-generate_summary_stats(MON, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
+generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 }
 \references{
 Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genet 11, 94 (2010). https://doi.org/10.1186

@@ -15,7 +15,7 @@ get_p_values(observed, null, h0 = c("less", "greater"))
 Calculate p-value for the observed PCA
 }
 \examples{
-#example
+# get_p_values(observed, null)
 
 }
 \author{

@@ -149,5 +149,3 @@ plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
                                                                       1*(1/(n_boot_pcas + 2)))))
 
 }
-#' @export
-#'

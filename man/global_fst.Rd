@@ -20,6 +20,10 @@ alleles in x.}
 \description{
 Calculates FST globally across all subsets
 }
+\examples{
+#global_fst(mon_sn)
+
+}
 \author{
 William Hemstrom
 

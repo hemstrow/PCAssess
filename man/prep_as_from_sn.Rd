@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{prep_as_from_sn}
 \alias{prep_as_from_sn}
-\title{Prepare data in as format from data in sn format}
+\title{Prepare data in 'as' format from data in 'sn' format}
 \usage{
 prep_as_from_sn(x, facet)
 }
@@ -16,10 +16,10 @@ be unique.}
 individual sample.}
 }
 \description{
-Prepare data in as format from data in sn format
+Prepare data in 'as' format from data in 'sn' format
 }
 \examples{
-#example
+# prep_as_from_sn(mon_sn, facet="populations" )
 }
 \author{
 William Hemstrom
