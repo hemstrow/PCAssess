@@ -1,11 +1,19 @@
+#' Calculate global FST
+#'
+#' Calculates FST globally across all subsets
+#'
 #' @param x allele-count and observed heterozygosity data. Required columns are
 #'   \code{variable} containing locus IDs, \code{vf} containing
 #'   population/facet IDs, two containing allele counts for
 #'   the major/ref and minor/alt loci, respectively, and \code{ho} for observed
 #'   heterozygosity. Note that this object can be created from 0/1/2 formatted
 #'   genotypic data with \code{prep_as_from_sn}.
+#'
 #' @param ac_cols character, default c("0", "1"). Column names for the two
 #'   alleles in x.
+#'
+#' @author William Hemstrom
+#' @author Andy Lee
 #'
 #' @export
 global_fst <- function(x, ac_cols = c("0", "1")){
@@ -71,12 +79,25 @@ global_fst <- function(x, ac_cols = c("0", "1")){
   return(list(means = means, pairwise = out))
 }
 
-#' @param x genotypic data, formatted with genotypes as 0/1/2 for the
-#'   homozygous ref/major, heterozygous, and homozygous alt/minor, respectively.
-#'   Each row must be one locus, each column one individual. Column names must
-#'   be unique.
+#' smartPCAs
+#' Generate a raw smartPCA
+
+#' @param sn allele-count and observed heterozygosity data. Required columns are
+#'   \code{variable} containing locus IDs, \code{vf} containing
+#'   population/facet IDs, two containing allele counts for
+#'   the major/ref and minor/alt loci, respectively, and \code{ho} for observed
+#'   heterozygosity. Note that this object can be created from 0/1/2 formatted
+#'   genotypic data with \code{prep_as_from_sn}.
+#'
+#' @author William Hemstrom
+#' @author Andy Lee
 #'
 #' @export
+#'
+#' @examples
+#' # example code, generate a smartPCA
+#' quick_smartPCA(stickSNPs)
+
 quick_smartPCA <- function(sn){
   ms <- colMeans(sn, na.rm = TRUE)
   ms <- ms[col(sn)]
@@ -91,13 +112,16 @@ quick_smartPCA <- function(sn){
   return(pca_r$u)
 }
 
-#' @param x allele-count and observed heterozygosity data. Required columns are
+
+#' Generate summary statistics
+
+#' @param as allele-count and observed heterozygosity data. Required columns are
 #'   \code{variable} containing locus IDs, \code{vf} containing
 #'   population/facet IDs, two containing allele counts for
 #'   the major/ref and minor/alt loci, respectively, and \code{ho} for observed
 #'   heterozygosity. Note that this object can be created from 0/1/2 formatted
 #'   genotypic data with \code{prep_as_from_sn}.
-#' @param x genotypic data, formatted with genotypes as 0/1/2 for the
+#' @param genotypes genotypic data, formatted with genotypes as 0/1/2 for the
 #'   homozygous ref/major, heterozygous, and homozygous alt/minor, respectively.
 #'   Each row must be one locus, each column one individual. Column names must
 #'   be unique.
@@ -109,8 +133,16 @@ quick_smartPCA <- function(sn){
 #'   loci as high-Fst.
 #' @param store_pca logical, default FALSE. If TRUE, PCAs for both all and high-
 #'   Fst loci will be retained and returned.
+#' @reference Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genet 11, 94 (2010). https://doi.org/10.1186
+#'
+#' @author William Hemstrom
+#' @author Andy Lee
 #'
 #' @export
+#'
+#' @example
+#' #Generate summary statistics
+#' generate_summary_stats(MON, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), fst_cut = .95,
                                    store_pca = FALSE){
   fst <- global_fst(as, ac_cols)
@@ -147,6 +179,20 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
   return(list(Fstat = mav, fst = tfst, delta_Fstat = mav - omav, delta_fst = tfst - ofst, init_Fstat = omav, init_fst = ofst))
 }
 #' @export
+#'
+#'
+#' Calculate p-value for the observed PCA
+#'
+#' @param observed
+#' @param null
+#' @h0 h0
+#'
+#' @author William Hemstrom
+#' @author Andy Lee
+#'
+#' @export
+#' @example
+#'
 get_p_values <- function(observed, null, h0 = c("less", "greater")){
   ec_dists <- lapply(null, ecdf)
 
@@ -160,15 +206,23 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
   }
   return(p)
 }
+#' export
+#'
+
+# Prepare data in as format from data in sn format
 
 #' @param x genotypic data, formatted with genotypes as 0/1/2 for the
 #'   homozygous ref/major, heterozygous, and homozygous alt/minor, respectively.
 #'   Each row must be one locus, each column one individual. Column names must
 #'   be unique.
-#' @param facet character vector noting population informtion for each
-#'   inidivudal sample.
+#' @param facet character vector noting population inform for each
+#'   individual sample.
+#' @author William Hemstrom
+#' @author Andy Lee
 #'
 #' @export
+#' @example
+
 prep_as_from_sn <- function(x, facet){
   browser()
   .tab_func <- function(x){
@@ -202,3 +256,4 @@ prep_as_from_sn <- function(x, facet){
 
   return(list(gmat = gmat, amat = amat, ho = ho))
 }
+#' @export

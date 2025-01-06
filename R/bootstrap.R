@@ -26,6 +26,7 @@
 #' @examples
 #' # provide example code here
 #' run_permutation(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
+
 run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
   #===============sanity checks===================
   msg <- character()
@@ -73,8 +74,6 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 #' @return a ggplot of the null distribution of F-statistic and observed F-statistic from PCA permutation testing.
 #'  if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of permuted PCAs
 #'
-#' @references
-#' # list the citations
 #'
 #' @author William Hemstrom
 #' @author Andy Lee
