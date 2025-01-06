@@ -8,7 +8,7 @@
 #' @param facet character. Categorical variable by which the data was broken up e.g., population, treatment.
 #' @param n numeric. Number of permutations to run.
 #' @param fst_cut numeric, default 0.95. Cut-off used to select highest fst loci.
-#' @param par NOTE: do we still use this?
+#' @param par numeric. Number of parallel threads to use.
 #' @param store_pca logical, default FALSE. If TRUE, returns the raw PCA.
 #'
 #'
@@ -24,7 +24,6 @@
 #'
 #' @export
 #' @examples
-#' # provide example code here
 #' run_permutation(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
 
 run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
@@ -64,12 +63,12 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
   }
 }
 
-#' Plot PCA boostrapping results
+#' Plot PCA permutation results
 #'
-#' Plots results from PCA boostrap/permutation testing
+#' Plots results from PCA permutation testing
 #'
-#' @param x a list containing the null distribution, observed values, and p-vaules from PCA permutation testing
-#' @param n number of permuation to plot
+#' @param permute_res a list containing the null distribution, observed values, and p-vaules from PCA permutation testing
+#' @param n_permute_pcas number of permutation to plot
 #'
 #' @return a ggplot of the null distribution of F-statistic and observed F-statistic from PCA permutation testing.
 #'  if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of permuted PCAs
@@ -81,13 +80,13 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 #' @export
 #'
 #' @examples
-#' # plot observed PCA and 100 bootstraps/permutations
-#' plot_boot_res(boot_res, 100)
+#' # plot observed PCA and 100 permutations
+#' plot_permutation_res(boot_res, 100)
 #'
 #' # plot only the observed PCA
-#' plot_boot_res(boot_res, 0)
+#' plot_permutation_res(boot_res, 0)
 #'
-plot_boot_res <- function(boot_res, n_boot_pcas = 1){
+plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
 
   #=======result distribution plot, always make this=======
   dist_plot <- ggplot2::ggplot(boot_res$null_distribution, ggplot2::aes(x = delta_Fstat)) +

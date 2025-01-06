@@ -112,7 +112,6 @@ quick_smartPCA <- function(sn){
   return(pca_r$u)
 }
 
-
 #' Generate summary statistics
 
 #' @param as allele-count and observed heterozygosity data. Required columns are
@@ -133,14 +132,14 @@ quick_smartPCA <- function(sn){
 #'   loci as high-Fst.
 #' @param store_pca logical, default FALSE. If TRUE, PCAs for both all and high-
 #'   Fst loci will be retained and returned.
-#' @reference Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genet 11, 94 (2010). https://doi.org/10.1186
+#' @references Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genet 11, 94 (2010). https://doi.org/10.1186
 #'
 #' @author William Hemstrom
 #' @author Andy Lee
 #'
 #' @export
 #'
-#' @example
+#' @examples
 #' #Generate summary statistics
 #' generate_summary_stats(MON, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), fst_cut = .95,
@@ -178,20 +177,17 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
   }
   return(list(Fstat = mav, fst = tfst, delta_Fstat = mav - omav, delta_fst = tfst - ofst, init_Fstat = omav, init_fst = ofst))
 }
-#' @export
-#'
-#'
+
 #' Calculate p-value for the observed PCA
 #'
-#' @param observed
-#' @param null
-#' @h0 h0
+#' @param observed the observed dataset
+#' @param null the null dataset
 #'
 #' @author William Hemstrom
 #' @author Andy Lee
 #'
 #' @export
-#' @example
+#' @examples #example
 #'
 get_p_values <- function(observed, null, h0 = c("less", "greater")){
   ec_dists <- lapply(null, ecdf)
@@ -206,11 +202,9 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
   }
   return(p)
 }
-#' export
-#'
 
-# Prepare data in as format from data in sn format
 
+#' Prepare data in as format from data in sn format
 #' @param x genotypic data, formatted with genotypes as 0/1/2 for the
 #'   homozygous ref/major, heterozygous, and homozygous alt/minor, respectively.
 #'   Each row must be one locus, each column one individual. Column names must
@@ -221,7 +215,7 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 #' @author Andy Lee
 #'
 #' @export
-#' @example
+#' @examples #example
 
 prep_as_from_sn <- function(x, facet){
   browser()
@@ -256,4 +250,3 @@ prep_as_from_sn <- function(x, facet){
 
   return(list(gmat = gmat, amat = amat, ho = ho))
 }
-#' @export
