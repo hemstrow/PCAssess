@@ -1,4 +1,4 @@
-#' Run PCA boostrapping pipeline
+#' Run PCA permutation pipeline
 #'
 #' Runs the full PCA boostrap/permutation testing pipeline using genetic data.
 #'
@@ -6,7 +6,7 @@
 #'   0 and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns
 #'   are individuals.
 #' @param facet character. Categorical variable by which the data was broken up e.g., population, treatment.
-#' @param n numeric. Number of bootstraps/permutations to run.
+#' @param n numeric. Number of permutations to run.
 #' @param fst_cut numeric, default 0.95. Cut-off used to select highest fst loci.
 #' @param par NOTE: do we still use this?
 #' @param store_pca logical, default FALSE. If TRUE, returns the raw PCA.
@@ -25,8 +25,8 @@
 #' @export
 #' @examples
 #' # provide example code here
-#' run_bootstrapping(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
-run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
+#' run_permutation(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
+run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
   #===============sanity checks===================
   msg <- character()
   warn <- character()
@@ -68,10 +68,10 @@ run_bootstrapping <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca
 #' Plots results from PCA boostrap/permutation testing
 #'
 #' @param x a list containing the null distribution, observed values, and p-vaules from PCA permutation testing
-#' @param n number of bootstrap/permuation to plot
+#' @param n number of permuation to plot
 #'
 #' @return a ggplot of the null distribution of F-statistic and observed F-statistic from PCA permutation testing.
-#'  if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of bootstrapped/permuted PCAs
+#'  if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of permuted PCAs
 #'
 #' @references
 #' # list the citations
