@@ -9,11 +9,11 @@ plot_boot_res(boot_res, n_boot_pcas = 1)
 \arguments{
 \item{x}{a list containing the null distribution, observed values, and p-vaules from PCA permutation testing}
 
-\item{n}{number of bootstrap/permuation to plot}
+\item{n}{number of permuation to plot}
 }
 \value{
 a ggplot of the null distribution of F-statistic and observed F-statistic from PCA permutation testing.
- if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of bootstrapped/permuted PCAs
+ if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of permuted PCAs
 }
 \description{
 Plots results from PCA boostrap/permutation testing
@@ -25,9 +25,6 @@ plot_boot_res(boot_res, 100)
 # plot only the observed PCA
 plot_boot_res(boot_res, 0)
 
-}
-\references{
-# list the citations
 }
 \author{
 William Hemstrom
