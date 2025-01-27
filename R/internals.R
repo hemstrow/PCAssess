@@ -124,7 +124,6 @@
       pca <- vector("list", nboots)
     }
 
-    browser()
     for(i in 1:nboots){
       cat(i, "\n")
 

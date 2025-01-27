@@ -164,8 +164,7 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
   fst_high <- global_fst(high_fst_as, ac_cols)
   tfst <- fst_high$means$fst
 
-
-  tpca <- quick_smartPCA(t(genotypes[which(colnames(genotypes) %in% high_fst),]))
+  tpca <- quick_smartPCA(t(genotypes[which(rownames(genotypes) %in% high_fst),]))
 
   tpca <- as.data.table(tpca)
   tpca$pop <- facet
@@ -222,8 +221,9 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 #' @examples # prep_as_from_sn(mon_sn, facet="populations" )
 
 prep_as_from_sn <- function(x, facet){
-  browser()
   .tab_func <- function(x){
+    key <- data.table(oname = rownames(x),
+                      nname = paste0("V", 1:nrow(x)))
     x <- data.table::melt(data.table::transpose(x, keep.names = "samp"), id.vars = "samp") # transpose and melt
     data.table::set(x, j = "vf", value = facet[as.numeric(x$samp)])
 
@@ -235,7 +235,12 @@ prep_as_from_sn <- function(x, facet){
     amat$`0` <- gmat$`0`*2 + gmat$`1`
     amat$`1` <- gmat$`2`*2 + gmat$`1`
 
-    gmat$`NA` <- NULL
+    # replace names
+    amat[,variable := key$oname[match(variable, key$nname)]]
+    gmat[,variable := key$oname[match(variable, key$nname)]]
+
+
+    return(list(as = amat, gs = gmat))
   }
 
 
@@ -247,5 +252,23 @@ prep_as_from_sn <- function(x, facet){
 
 
   colnames(x) <- as.character(1:ncol(x))
-  return(list(gmat = gmat, amat = amat, ho = ho))
+
+  geno.tables <- vector("list", length(n_iters))
+  for(i in 1:n_iters){
+    end <- i*max_snps
+    end <- ifelse(end > nrow(x), nrow(x), end)
+    trows <- titer:end
+
+    geno.tables[[i]] <- .tab_func(x[trows,])
+
+    titer <- i*max_snps+ 1
+  }
+
+  gs <- purrr::map(geno.tables, "gs")
+  as <- purrr::map(geno.tables, "as")
+  gs <- rbindlist(gs)
+  as <- rbindlist(as)
+  ho <- gs$`1`/(gs$`0` + gs$`2`)
+
+  return(list(gmat = gs, amat = as, ho = ho))
 }

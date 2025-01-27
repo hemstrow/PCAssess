@@ -31,9 +31,9 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
   msg <- character()
   warn <- character()
 
-  problem <- FALSE
-  if(problem){
-    msg <- c(msg, "Ee have a new problem.\n")
+
+  if(fst_cut > 1 | fst_cut < 0){
+    msg <- c(msg, "Fst cut-off must be between 0 and 1.\n")
   }
 
 
