@@ -1,6 +1,6 @@
 #'monarch butterfly example dataset
 #'
-#'A dataset containing genotypes at XXX SNP loci for XXX Monarch Butterflies
+#'A dataset containing genotypes at 17,715 SNP loci for 84 Monarch Butterflies
 #'collected in XXX from several locations across North America,
 #'For more information, see Hemstrom et al (2022).
 #'
