@@ -120,8 +120,8 @@ plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
       ggplot2::theme_bw() +
       ggplot2::guides(color = ggplot2::guide_legend(title = ccol))  +
       khroma::scale_color_batlow(discrete = TRUE) +
-      ggplot2::theme(axis.text = element_blank(),
-                     axis.ticks = element_blank())
+      ggplot2::theme(axis.text = ggplot2::element_blank(),
+                     axis.ticks = ggplot2::element_blank())
 
     return(p)
   }
