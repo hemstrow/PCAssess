@@ -121,6 +121,8 @@ quick_smartPCA <- function(sn){
 }
 
 #' Generate summary statistics
+#'
+#' Generate summary statistics (F-stat) for PCA Permutation Testing.
 
 #' @param as allele-count and observed heterozygosity data. Required columns are
 #'   \code{variable} containing locus IDs, \code{vf} containing
@@ -151,7 +153,7 @@ quick_smartPCA <- function(sn){
 #' @export
 #'
 #' @examples
-#' #Generate summary statistics (F-stat) for PCA Permutation Testing.
+
 #' generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), fst_cut = .95,
                                    store_pca = FALSE){
