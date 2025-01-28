@@ -15,6 +15,8 @@
 #' @author William Hemstrom
 #' @author Andy Lee
 #'
+#' @references Weir and Cockerham (1984). Evolution
+#'
 #' @examples
 #' #global_fst(mon_sn)
 #'
@@ -97,6 +99,9 @@ global_fst <- function(x, ac_cols = c("0", "1")){
 #'
 #' @export
 #'
+#' @references Patterson, N., Price, A. L., & Reich, D. (2006). Population structure andEigenanalysis. PLoS Genetics, 2(12), e190
+#' @references Price, A. L., Patterson, N. J., Plenge, R. M., Weinblatt, M. E., Shadick, N.A., & Reich, D. (2006). Principal components analysis corrects forstratification in genome-wide association studies. Nature Genetics,38(8), 904–909.
+#'
 #' @examples
 #' # example code, generate a smartPCA
 #' # quick_smartPCA(mon_sn)
@@ -135,6 +140,9 @@ quick_smartPCA <- function(sn){
 #'   loci as high-Fst.
 #' @param store_pca logical, default FALSE. If TRUE, PCAs for both all and high-
 #'   Fst loci will be retained and returned.
+#'
+#' @return a list containing: the observed F-statistic, observed FST value, the change in F-statistic (delta F-statistic), delta FST, and the initial F-statistic and FST.
+
 #' @references Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genet 11, 94 (2010). https://doi.org/10.1186
 #'
 #' @author William Hemstrom
@@ -143,7 +151,7 @@ quick_smartPCA <- function(sn){
 #' @export
 #'
 #' @examples
-#' #Generate summary statistics
+#' #Generate summary statistics (F-stat) for PCA Permutation Testing.
 #' generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), fst_cut = .95,
                                    store_pca = FALSE){
