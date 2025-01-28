@@ -81,28 +81,28 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 #'
 #' @examples
 #' # plot observed PCA and 100 permutations
-#' plot_permutation_res(boot_res, 100)
+#' plot_permutation_res(permute_res, 100)
 #'
 #' # plot only the observed PCA
-#' plot_permutation_res(boot_res, 0)
+#' plot_permutation_res(permute_res, 0)
 #'
 plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
 
   #=======result distribution plot, always make this=======
-  dist_plot <- ggplot2::ggplot(boot_res$null_distribution, ggplot2::aes(x = delta_Fstat)) +
+  dist_plot <- ggplot2::ggplot(permute_res$null_distribution, ggplot2::aes(x = delta_Fstat)) +
     ggplot2::geom_density() +
-    ggplot2::geom_vline(xintercept = boot_res$observed_values$delta_Fstat, color = "red") +
-    ggplot2::geom_label(data = data.frame(x = boot_res$observed_values$delta_Fstat,
-                                         lab = paste0("p = ", boot_res$pvalues["delta_Fstat"]),
-                                         y = max(density(boot_res$null_distribution$delta_Fstat)$y)*1.1),
+    ggplot2::geom_vline(xintercept = permute_res$observed_values$delta_Fstat, color = "red") +
+    ggplot2::geom_label(data = data.frame(x = permute_res$observed_values$delta_Fstat,
+                                         lab = paste0("p = ", permute_res$pvalues["delta_Fstat"]),
+                                         y = max(density(permute_res$null_distribution$delta_Fstat)$y)*1.1),
                        ggplot2::aes(x = x, y = y, label = lab), hjust = "inward") +
-    coord_cartesian(clip = "off") +
+    ggplot2::coord_cartesian(clip = "off") +
     ggplot2::theme_bw() +
     ggplot2::xlab(bquote(Delta * "F (change in clustering)")) +
     ggplot2::ylab("Density")
 
 
-  do_pcas <- "real_pca" %in% names(boot_res)
+  do_pcas <- "real_pca" %in% names(permute_res)
   if(!do_pcas){
     return(dist_plot)
   }
@@ -127,7 +127,7 @@ plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
   }
 
   # real
-  pca_real <- plot_pca(boot_res$real_pca$all_vars, boot_res$real_pca$selected)
+  pca_real <- plot_pca(permute_res$real_pca$all_vars, permute_res$real_pca$selected)
 
   # boots
   if(n_boot_pcas == 0){
@@ -135,9 +135,9 @@ plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
   }
 
   bp <- vector("list", n_boot_pcas)
-  use <- sample(length(boot_res$null_pca), n_boot_pcas, replace = FALSE)
+  use <- sample(length(permute_res$null_pca), n_boot_pcas, replace = FALSE)
   for(i in 1:n_boot_pcas){
-    bp[[i]] <- plot_pca(boot_res$null_pca[[use[i]]]$all_vars, boot_res$null_pca[[use[i]]]$selected) + ggplot2::guides(color = "none")
+    bp[[i]] <- plot_pca(permute_res$null_pca[[use[i]]]$all_vars, permute_res$null_pca[[use[i]]]$selected) + ggplot2::guides(color = "none")
   }
   top <- cowplot::plot_grid(plotlist = c(list(pca_real +
                                                 ggplot2::guides(color = "none") +
