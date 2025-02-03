@@ -24,6 +24,9 @@ Calculates FST globally across all subsets
 #global_fst(mon_sn)
 
 }
+\references{
+Weir and Cockerham (1984). Evolution
+}
 \author{
 William Hemstrom
 

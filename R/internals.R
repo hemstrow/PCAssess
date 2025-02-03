@@ -128,7 +128,7 @@
       cat(i, "\n")
 
 
-      tout <- generate_summary_stats(as = x[[i]]$amat, genotypes = genotypes, facet = x[[i]]$facet, fst_cut = fst_cut)
+      tout <- generate_summary_stats(as = x[[i]]$amat, genotypes = genotypes, facet = x[[i]]$facet, fst_cut = fst_cut, store_pca = store_pca)
       if(store_pca){
         pca[[i]] <- tout$pca
       }

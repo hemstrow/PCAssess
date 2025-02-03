@@ -2,22 +2,32 @@
 #'
 #' Runs the full PCA boostrap/permutation testing pipeline using genetic data.
 #'
-#' @param x Genetic data formatted as single numbers indicated genotype, where
-#'   0 and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns
+#' @param x Genetic data formatted as single numbers indicated genotype, where 0
+#'   and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns
 #'   are individuals.
-#' @param facet character. Categorical variable by which the data was broken up e.g., population, treatment.
+#' @param facet character. Categorical vector by which the data was broken up
+#'   e.g., population, treatment. Must contain the same number of samples in the
+#'   same order as in \code{x}.
 #' @param n numeric. Number of permutations to run.
-#' @param fst_cut numeric, default 0.95. Cut-off used to select highest fst loci.
+#' @param fst_cut numeric, default 0.95. Cut-off used to select highest fst
+#'   loci.
 #' @param par numeric. Number of parallel threads to use.
 #' @param store_pca logical, default FALSE. If TRUE, returns the raw PCA.
 #'
 #'
-#' @return a list containing: null distribution of the F-statistic observed values, the observed F-statistic, and the p-values from PCA permutation testing
+#' @return a list containing: null distribution of the F-statistic observed
+#'   values, the observed F-statistic, the p-values from PCA permutation
+#'   testing, and optionally PCAs for the observed data and all permutations.
 #'
-#' @references Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of
-#'  principal components: a new method for the analysis of genetically
-#'  structured populations. BMC Genet 11, 94 (2010).
-#'  \url{https://doi.org/10.1186}
+#' @references
+#' Patterson, Nick, Price, Alkes L. and Reich, David (2006). Population
+#' Structure and Eigenanalysis. PLOS Genetics 2, 12
+#' \url{https://doi.org/10.1371/journal.pgen.0020190}
+#'
+#' Price, Alkes L., Patterson, Nick J., Plenge, Robert M., Weinblatt,
+#' Michael E., Shadick, Nancy A. and Reich, David (2006). Principal components
+#' analysis corrects for stratification in genome-wide association studies.
+#' Nature Genetics 38, 8 \url{https://doi.org/10.1038/ng1847}
 #'
 #' @author William Hemstrom
 #' @author Andy Lee
@@ -25,7 +35,6 @@
 #' @export
 #' @examples
 #' run_permutation(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
-
 run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca = FALSE){
   #===============sanity checks===================
   msg <- character()
@@ -67,11 +76,19 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 #'
 #' Plots results from PCA permutation testing
 #'
-#' @param permute_res a list containing the null distribution, observed values, and p-vaules from PCA permutation testing
-#' @param n_permute_pcas number of permutation to plot
+#' @param permute_res a list containing the null distribution, observed values,
+#'   p-vaules from PCA permutation testing, and possibly PCAs, like that
+#'   produced by \code{\link{run_permutation}}.
+#' @param n_permute_pcas numeric, default 1. The number of permutation PCAs to
+#'   plot if PCA data is available in \code{permute_res}.
+#' @param plot_observed_pcas logical, default TRUE. If TRUE and PCA data is
+#'   present in \code{permute_res}, observed PCAs will be plotted alongside
+#'   bootstraps and/or p-value distribution.
 #'
-#' @return a ggplot of the null distribution of F-statistic and observed F-statistic from PCA permutation testing.
-#'  if do_pcas is \code{TRUE}, also returns a ggplot of the observed PCA and n number of permuted PCAs
+#' @return a ggplot of the null distribution of F-statistic and observed
+#'   F-statistic from PCA permutation testing. If PCAs are present, also
+#'   optionally includes plots of the observed PCA and n number of permuted
+#'   PCAs.
 #'
 #'
 #' @author William Hemstrom
@@ -80,13 +97,23 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 #' @export
 #'
 #' @examples
-#' # plot observed PCA and 100 permutations
-#' plot_permutation_res(permute_res, 100)
+#' # run some permutations
+#' res <- run_permutation(mon_sn[1:100,],
+#'                         facet = sample(LETTERS[1:4], ncol(mon_sn), TRUE),
+#'                         n = 10, fst_cut = 0.95, store_pca = TRUE)
+#'
+#' # plot observed PCA and all 10 permutations
+#' plot_permutation_res(res, 10)
 #'
 #' # plot only the observed PCA
-#' plot_permutation_res(permute_res, 0)
+#' plot_permutation_res(res, 0)
 #'
-plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
+#' # plot no PCAs, only the distribution of p-values
+#' plot_permutation_res(res, 0, plot_observed_pcas = FALSE)
+#'
+#' # plot only the real PCAs and the distribution of observed p-values
+#' plot_permutation_res(res, 0, plot_observed_pcas = TRUE)
+plot_permutation_res <- function(permute_res, n_boot_pcas = 1, plot_observed_pcas = TRUE){
 
   #=======result distribution plot, always make this=======
   dist_plot <- ggplot2::ggplot(permute_res$null_distribution, ggplot2::aes(x = delta_Fstat)) +
@@ -131,7 +158,14 @@ plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
 
   # boots
   if(n_boot_pcas == 0){
-    return(cowplot::plot_grid(pca_real, dist_plot, nrow = 2, align = "hv", axis = "trbl"))
+    if(plot_observed_pcas == TRUE){
+      return(cowplot::plot_grid(pca_real +
+                                  ggplot2::theme(plot.background = element_rect(color = "lightgrey", fill = "lightgrey")),
+                                dist_plot, nrow = 2, align = "hv", axis = "trbl"))
+    }
+    else{
+      return(dist_plot)
+    }
   }
 
   bp <- vector("list", n_boot_pcas)
@@ -139,11 +173,17 @@ plot_permutation_res <- function(permute_res, n_boot_pcas = 1){
   for(i in 1:n_boot_pcas){
     bp[[i]] <- plot_pca(permute_res$null_pca[[use[i]]]$all_vars, permute_res$null_pca[[use[i]]]$selected) + ggplot2::guides(color = "none")
   }
-  top <- cowplot::plot_grid(plotlist = c(list(pca_real +
-                                                ggplot2::guides(color = "none") +
-                                                ggplot2::theme(plot.background = element_rect(color = "lightgrey", fill = "lightgrey"))),
-                                         bp),
-                            nrow = length(bp) + 1)
+  if(plot_observed_pcas){
+    top <- cowplot::plot_grid(plotlist = c(list(pca_real +
+                                                  ggplot2::guides(color = "none") +
+                                                  ggplot2::theme(plot.background = element_rect(color = "lightgrey", fill = "lightgrey"))),
+                                           bp),
+                              nrow = length(bp) + 1)
+  }
+  else{
+    top <- cowplot::plot_grid(plotlist = bp, nrow = length(bp))
+  }
+
   top <- cowplot::plot_grid(top, ggpubr::get_legend(pca_real), nrow = 1, rel_widths = c(.9, .1))
   return(cowplot::plot_grid(top, dist_plot, nrow = 2, rel_heights = c(1*((n_boot_pcas + 1)/(n_boot_pcas + 2)),
                                                                       1*(1/(n_boot_pcas + 2)))))

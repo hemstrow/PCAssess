@@ -29,11 +29,12 @@ test_that("run_permutation", {
   # does this actually do what we expect.
   skip_on_cran()
   set.seed(12332)
-  res <- run_permutation(mon_sn[sample(nrow(mon_sn), 10000),],
+  res <- run_permutation(mon_sn,
                          facet = sample(LETTERS[1:4], ncol(mon_sn), TRUE),
                          n = 10, fst_cut = 0.95, par = 4)
-  expect_true(res$pvalues["delta_Fstat"] <= 0.1)
-
+  expect_true(res$observed_values$Fstat > res$observed_values$init_Fstat) # there should be more clustering!
+  expect_true(all(res$null_distribution$delta_Fstat > 0)) # in all boots!
+  expect_false(res$pvalues["delta_Fstat"] <= 0.1) # but it shouldn't be a significant increase.
 })
 
 test_that("check errors and options", {
@@ -49,7 +50,4 @@ test_that("check errors and options", {
   #                 n = 10, fst_cut = .9)
 })
 
-# expect_output(x, y)
-# expect_message(x, y)
-# expect_warning(x, y)
-# expect_error(x, y)
+

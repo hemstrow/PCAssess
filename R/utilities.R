@@ -171,8 +171,9 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
   high_fst <- fst$pairwise$variable[high_fst]
 
   high_fst_as <- as[which(as$variable %in% high_fst),]
-  fst_high <- global_fst(high_fst_as, ac_cols)
-  tfst <- fst_high$means$fst
+  tfst <- fst$pairwise[variable %in% high_fst, mean(a, na.rm = TRUE)/mean(a + b + c, na.rm = TRUE)]
+  # fst_high <- global_fst(high_fst_as, ac_cols)
+  # tfst <- fst_high$means$fst
 
   tpca <- quick_smartPCA(t(genotypes[which(rownames(genotypes) %in% high_fst),]))
 

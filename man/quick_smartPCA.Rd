@@ -23,6 +23,11 @@ Generate a raw smartPCA
 # example code, generate a smartPCA
 # quick_smartPCA(mon_sn)
 }
+\references{
+Patterson, N., Price, A. L., & Reich, D. (2006). Population structure andEigenanalysis. PLoS Genetics, 2(12), e190
+
+Price, A. L., Patterson, N. J., Plenge, R. M., Weinblatt, M. E., Shadick, N.A., & Reich, D. (2006). Principal components analysis corrects forstratification in genome-wide association studies. Nature Genetics,38(8), 904–909.
+}
 \author{
 William Hemstrom
 

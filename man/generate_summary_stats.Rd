@@ -38,11 +38,13 @@ loci as high-Fst.}
 \item{store_pca}{logical, default FALSE. If TRUE, PCAs for both all and high-
 Fst loci will be retained and returned.}
 }
+\value{
+a list containing: the observed F-statistic, observed FST value, the change in F-statistic (delta F-statistic), delta FST, and the initial F-statistic and FST.
+}
 \description{
-Generate summary statistics
+Generate summary statistics (F-stat) for PCA Permutation Testing.
 }
 \examples{
-#Generate summary statistics
 generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
 }
 \references{
