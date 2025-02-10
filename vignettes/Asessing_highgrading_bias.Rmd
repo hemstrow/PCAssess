@@ -1,0 +1,48 @@
+---
+title: "Asessing highgrading bias in genetic data with PCAssess"
+author: "Andy Lee and William Hemstrom" 
+date: "Feburary 10, 2025" 
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PCAssess)
+set.seed(1213)
+```
+
+# PCAssess Introcution
+PCAssess is an R package for assessing high grading bias in population genetics. PCAssess implements and automates permuation tests to detect high grading bias in Principal Component Analysis (PCAs). 
+
+# Quick-start Guide
+Here, we will walk through a basic analysis of the example monarch butterfly data included in this package (mon_sn). We will run permutation tests and visualize the results. 
+
+# Data import
+PCAssess requires two inputs. First, genetic data formatted as single numbers indicated genotype, where 0 and 2 are homozygoytes and 1 is a heterozygote. Rows are SNPs and columns are individuals. Second, a character vector containing categorical variable by which the data was broken up e.g., population, treatment.
+```{r}
+snps_dat <- system.file("extdata", "mon_sn.rda", pcakage = "PCAssess")
+```
+
+# Running permutation tests
+This example runs permutation test on mon_sn, the example dataset included in the package. In this dataset, samples were separated into various populations "pop". Populations code are permuted 100 times, and top 5% FST loci are chosen with the default setting, 0.95. The resulting object, res, is an is a list containing: null distribution of the F-statistic observed values, the observed F-statistic, and the p-values from PCA permutation testing
+```{r}
+# 
+res <- run_permutation(mon_sn, "pop", 100, fst_cut = , par = FALSE, store_pca = FALSE) 
+```
+
+# Visualize permutation results
+This example visualizes the results from the above permutation tests. 
+```{r}
+plot_permutation_res(perm_res, 100) # plot distribution of F-statistic from 100 permutations
+plot_permutation_res(perm_res, 0) # plot only the observed PCA
+```
+
