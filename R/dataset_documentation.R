@@ -4,9 +4,6 @@
 #'collected in XXX from several locations across North America,
 #'For more information, see Hemstrom et al (2022).
 #'
-#'Stored in the snpRdata object class. See \code{\link{import.snpR.data}} for
-#'details.
-#'
 #'Genotypes noted as two characters representing bases sequenced at a specific
 #'site (e.g. "CC" or "GT"). Each SNP occupies one row, each sample occupies on
 #'column. Missing data coded as "NN".

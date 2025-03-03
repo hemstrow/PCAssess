@@ -36,14 +36,14 @@ Runs the full PCA boostrap/permutation testing pipeline using genetic data.
 run_permutation(snps_dat, "pop", 1000, fst_cut, par = FALSE, store_pca = FALSE)
 }
 \references{
-Patterson, Nick, Price, Alkes L. and Reich, David (2006). Population
-Structure and Eigenanalysis. PLOS Genetics 2, 12
-\url{https://doi.org/10.1371/journal.pgen.0020190}
+Patterson, Nick, Price, Alkes L. and Reich, David (2006).
+  Population Structure and Eigenanalysis. PLOS Genetics 2, 12
+  \url{https://doi.org/10.1371/journal.pgen.0020190}
 
-Price, Alkes L., Patterson, Nick J., Plenge, Robert M., Weinblatt,
-Michael E., Shadick, Nancy A. and Reich, David (2006). Principal components
-analysis corrects for stratification in genome-wide association studies.
-Nature Genetics 38, 8 \url{https://doi.org/10.1038/ng1847}
+  Price, Alkes L., Patterson, Nick J., Plenge, Robert M., Weinblatt,
+  Michael E., Shadick, Nancy A. and Reich, David (2006). Principal components
+  analysis corrects for stratification in genome-wide association studies.
+  Nature Genetics 38, 8 \url{https://doi.org/10.1038/ng1847}
 }
 \author{
 William Hemstrom

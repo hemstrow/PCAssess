@@ -10,6 +10,10 @@ get_p_values(observed, null, h0 = c("less", "greater"))
 \item{observed}{the observed dataset}
 
 \item{null}{the null dataset}
+
+\item{h0}{character, default \code{c("less", "greater")}. Vector of null
+hypotheses (null, greater, or two-sided) for each p-value to generate.
+Recycled if shorter than the number of tests to conduct.}
 }
 \description{
 Calculate p-value for the observed PCA

@@ -34,7 +34,7 @@ test_that("plot_permutation_res()", {
   # plot_observed_pcas handler set to FALSE
   p4 <- plot_permutation_res(res2, 0, plot_observed_pcas = FALSE)
   expect_true(length(p4$layers) == 3) # since this isn't cowplot, it'll be each layer of plot: point, vline, and label.
-  ## with boots
+  ## with perms
   p5 <- plot_permutation_res(res2, 10, plot_observed_pcas = FALSE)
   r5 <- capture.output(p5$layers[[1]])
   expect_true(length(grep("axis.title.y.left", r5)) == 20) # two per rep, no real

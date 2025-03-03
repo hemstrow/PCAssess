@@ -22,6 +22,8 @@
 #'
 #' @export
 global_fst <- function(x, ac_cols = c("0", "1")){
+  .SD <- . <- vf <- variable <- fst <- nk <- NULL
+
   ac_cols <- ac_cols[which(ac_cols %in% colnames(x))]
   nt <- data.table::dcast(x[,rowSums(.SD), .SDcols = ac_cols, by = .(vf, variable)], variable ~ vf, value.var = "V1")
   psm <- x[,.SD/rowSums(.SD), .SDcols = ac_cols, by = .(vf, variable)]
@@ -44,7 +46,7 @@ global_fst <- function(x, ac_cols = c("0", "1")){
                                 c = 0)
 
   for(k in 1:length(ac_cols)){
-    psf_m <- dcast(psm, variable ~ vf, value.var = colnames(psm)[k + 2])
+    psf_m <- data.table::dcast(psm, variable ~ vf, value.var = colnames(psm)[k + 2])
 
     # need to determine per-allele hom
     # if(!bi_allelic){
@@ -153,21 +155,25 @@ quick_smartPCA <- function(sn){
 #' @export
 #'
 #' @examples
-
-#' generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
+#' pop <- sample(c("A", "B"), ncol(mon_sn), TRUE)
+#' as <- prep_as_from_sn(mon_sn, pop)
+#' generate_summary_stats(x_as$real_as, mon_sn, facet="population", fst_cut=.95, store_pca = FALSE)
 generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), fst_cut = .95,
                                    store_pca = FALSE){
+  variable <- a <- b <- NULL
+
+
   fst <- global_fst(as, ac_cols)
   ofst <- fst$means$fst
 
   opca <- quick_smartPCA(t(genotypes))
-  opca <- as.data.table(opca)
+  opca <- data.table::as.data.table(opca)
   opca$pop <- facet
-  omav <- manova(cbind(PC1, PC2) ~ pop, opca)
+  omav <- stats::manova(cbind(PC1, PC2) ~ pop, opca)
   omav <- summary(omav)$stats[1,"approx F"]
 
 
-  high_fst <- which(fst$pairwise$fst >= quantile(fst$pairwise$fst, fst_cut, na.rm = TRUE))
+  high_fst <- which(fst$pairwise$fst >= stats::quantile(fst$pairwise$fst, fst_cut, na.rm = TRUE))
   high_fst <- fst$pairwise$variable[high_fst]
 
   high_fst_as <- as[which(as$variable %in% high_fst),]
@@ -177,10 +183,10 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
 
   tpca <- quick_smartPCA(t(genotypes[which(rownames(genotypes) %in% high_fst),]))
 
-  tpca <- as.data.table(tpca)
+  tpca <- data.table::as.data.table(tpca)
   tpca$pop <- facet
 
-  mav <- manova(cbind(PC1, PC2) ~ pop, tpca)
+  mav <- stats::manova(cbind(PC1, PC2) ~ pop, tpca)
   mav <- summary(mav)$stats[1,"approx F"]
 
   if(store_pca){
@@ -195,6 +201,9 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
 #'
 #' @param observed the observed dataset
 #' @param null the null dataset
+#' @param h0 character, default \code{c("less", "greater")}. Vector of null
+#'   hypotheses (null, greater, or two-sided) for each p-value to generate.
+#'   Recycled if shorter than the number of tests to conduct.
 #'
 #' @author William Hemstrom
 #' @author Andy Lee
@@ -203,7 +212,7 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
 #' @examples # get_p_values(observed, null)
 #'
 get_p_values <- function(observed, null, h0 = c("less", "greater")){
-  ec_dists <- lapply(null, ecdf)
+  ec_dists <- lapply(null, stats::ecdf)
 
   p <- numeric(length(observed))
   names(p) <- names(observed)
@@ -232,9 +241,12 @@ get_p_values <- function(observed, null, h0 = c("less", "greater")){
 #' @examples # prep_as_from_sn(mon_sn, facet="populations" )
 
 prep_as_from_sn <- function(x, facet){
+  . <- variable <- vf <- NULL
+  x <- as.data.table(x)
+
   .tab_func <- function(x){
-    key <- data.table(oname = rownames(x),
-                      nname = paste0("V", 1:nrow(x)))
+    key <- data.table::data.table(oname = rownames(x),
+                                  nname = paste0("V", 1:nrow(x)))
     x <- data.table::melt(data.table::transpose(x, keep.names = "samp"), id.vars = "samp") # transpose and melt
     data.table::set(x, j = "vf", value = facet[as.numeric(x$samp)])
 
@@ -277,8 +289,8 @@ prep_as_from_sn <- function(x, facet){
 
   gs <- purrr::map(geno.tables, "gs")
   as <- purrr::map(geno.tables, "as")
-  gs <- rbindlist(gs)
-  as <- rbindlist(as)
+  gs <- data.table::rbindlist(gs)
+  as <- data.table::rbindlist(as)
   ho <- gs$`1`/(gs$`0` + gs$`2`)
 
   return(list(gmat = gs, amat = as, ho = ho))

@@ -1,5 +1,10 @@
+#'@import data.table
+#'@importFrom foreach %dopar%
+NULL
+
+
 .boot_as <- function(x, n, facet){
-  ..tm <- ..ord <-  NULL
+  ..tm <- ..ord <- ho <-  NULL
 
   out <- vector("list", n)
 
@@ -73,9 +78,10 @@
 
 
 .do_boots <- function(x, genotypes, par = FALSE, fst_cut = .95, store_pca){
+  boot <- Fstat <- fst <- delta_Fstat <- delta_fst <- init_Fstat <- init_fst <- NULL
 
   nboots <- length(x)
-  if(par > 2){
+  if(par >= 2){
     cl <- parallel::makePSOCKcluster(par)
     doParallel::registerDoParallel(cl)
     out <- foreach::foreach(q = 1:nboots, .export = c("generate_summary_stats", "global_fst", "quick_smartPCA"),
@@ -85,13 +91,13 @@
                               tout <- generate_summary_stats(as = tdata$amat, genotypes = genotypes, facet = tdata$facet, fst_cut = fst_cut, store_pca = store_pca)
 
                               if(store_pca){
-                                tout <- list(res = data.table(boot = q, Fstat = tout$Fstat, fst = tout$fst,
-                                                              delta_Fstat = tout$delta_Fstat, delta_fst = tout$delta_fst,
-                                                              init_Fstat = tout$init_Fstat, init_fst = tout$init_fst),
+                                tout <- list(res = data.table::data.table(boot = q, Fstat = tout$Fstat, fst = tout$fst,
+                                                                          delta_Fstat = tout$delta_Fstat, delta_fst = tout$delta_fst,
+                                                                          init_Fstat = tout$init_Fstat, init_fst = tout$init_fst),
                                              pca = tout$pca)
                               }
                               else{
-                                tout <- data.table(boot = q, Fstat = tout$Fstat, fst = tout$fst, delta_Fstat = tout$delta_Fstat, delta_fst = tout$delta_fst, init_Fstat = tout$init_Fstat, init_fst = tout$init_fst)
+                                tout <- data.table::data.table(boot = q, Fstat = tout$Fstat, fst = tout$fst, delta_Fstat = tout$delta_Fstat, delta_fst = tout$delta_fst, init_Fstat = tout$init_Fstat, init_fst = tout$init_fst)
                               }
                               tout
                             }
@@ -112,7 +118,7 @@
     }
   }
   else{
-    out <- data.table(boot = 1:nboots)
+    out <- data.table::data.table(boot = 1:nboots)
     out$Fstat <- 0
     out$fst <- 0
     out$delta_Fstat <- 0
@@ -149,7 +155,8 @@
 }
 
 .prep_boots <- function(x, facet, n){
-  x <- as.data.table(x)
+  ho <- NULL
+  x <- data.table::as.data.table(x)
   as <- prep_as_from_sn(x, facet)
 
   as_real <- as$amat
