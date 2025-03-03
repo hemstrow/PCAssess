@@ -44,6 +44,10 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
     msg <- c(msg, "Fst cut-off must be between 0 and 1.\n")
   }
 
+  if(length(unique(facet)) < 2){
+    msg <- c(msg, "There must be at least two unique values in `facet`.\n")
+  }
+
 
   if(length(msg) > 0){
     stop(msg)

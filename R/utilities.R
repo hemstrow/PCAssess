@@ -162,7 +162,6 @@ generate_summary_stats <- function(as, genotypes, facet, ac_cols = c("0", "1"), 
                                    store_pca = FALSE){
   variable <- a <- b <- NULL
 
-
   fst <- global_fst(as, ac_cols)
   ofst <- fst$means$fst
 
@@ -252,8 +251,6 @@ prep_as_from_sn <- function(x, facet){
 
     gmat <- data.table::dcast(data.table::setDT(x), variable + vf ~ value, value.var='value', length) # cast
 
-    ho <- gmat$`1`/(gmat$`0` + gmat$`2`)
-
     amat <- gmat[,.(variable, vf)]
     amat$`0` <- gmat$`0`*2 + gmat$`1`
     amat$`1` <- gmat$`2`*2 + gmat$`1`
@@ -291,7 +288,7 @@ prep_as_from_sn <- function(x, facet){
   as <- purrr::map(geno.tables, "as")
   gs <- data.table::rbindlist(gs)
   as <- data.table::rbindlist(as)
-  ho <- gs$`1`/(gs$`0` + gs$`2`)
+  ho <- gs$`1`/(gs$`0` + gs$`2` + gs$`1`)
 
   return(list(gmat = gs, amat = as, ho = ho))
 }
