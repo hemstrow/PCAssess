@@ -45,7 +45,9 @@ a list containing: the observed F-statistic, observed FST value, the change in F
 Generate summary statistics (F-stat) for PCA Permutation Testing.
 }
 \examples{
-generate_summary_stats(mon_sn, genotypes, facet="population", fst_cut=.95, store_pca = FALSE)
+pop <- sample(c("A", "B"), ncol(mon_sn), TRUE)
+as <- prep_as_from_sn(mon_sn, pop)
+generate_summary_stats(x_as$real_as, mon_sn, facet="population", fst_cut=.95, store_pca = FALSE)
 }
 \references{
 Jombart, T., Devillard, S. & Balloux, F. Discriminant analysis of principal components: a new method for the analysis of genetically structured populations. BMC Genet 11, 94 (2010). https://doi.org/10.1186

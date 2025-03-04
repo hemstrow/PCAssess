@@ -22,10 +22,11 @@ bootstraps and/or p-value distribution.}
 a ggplot of the null distribution of F-statistic and observed
   F-statistic from PCA permutation testing. If PCAs are present, also
   optionally includes plots of the observed PCA and n number of permuted
-  PCAs.
+  PCAs. PCAs for observed data will have a gray background, PCAs for
+  permutations will not.
 }
 \description{
-Plots results from PCA permutation testing
+Plots results from PCA permutation testing.
 }
 \examples{
 # run some permutations

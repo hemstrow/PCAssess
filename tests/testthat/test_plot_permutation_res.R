@@ -21,11 +21,11 @@ test_that("plot_permutation_res()", {
   # check that we are returning the correct number of panels
   p2 <- plot_permutation_res(res2, 10)
   r2 <- capture.output(p2$layers[[1]])
-  expect_true(length(grep("axis.title.y.left", r2)) == 22) # two per rep + real
+  expect_true(length(grep("axis.title.y.left", r2)) == 180)
 
   p3 <- plot_permutation_res(res2, 2)
   r3 <- capture.output(p3$layers[[1]])
-  expect_true(length(grep("axis.title.y.left", r3)) == 6)
+  expect_true(length(grep("axis.title.y.left", r3)) == 28)
 
   # check that both have the bottom panel
   expect_true(length(p2$layers) == 2)
@@ -37,7 +37,7 @@ test_that("plot_permutation_res()", {
   ## with perms
   p5 <- plot_permutation_res(res2, 10, plot_observed_pcas = FALSE)
   r5 <- capture.output(p5$layers[[1]])
-  expect_true(length(grep("axis.title.y.left", r5)) == 20) # two per rep, no real
+  expect_true(length(grep("axis.title.y.left", r5)) == 154)
   expect_true(length(p5$layers) == 2) # still has bottom panel
 })
 

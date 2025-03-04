@@ -77,7 +77,7 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 
 #' Plot PCA permutation results
 #'
-#' Plots results from PCA permutation testing
+#' Plots results from PCA permutation testing.
 #'
 #' @param permute_res a list containing the null distribution, observed values,
 #'   p-vaules from PCA permutation testing, and possibly PCAs, like that
@@ -91,7 +91,8 @@ run_permutation <- function(x, facet, n, fst_cut = .95, par = FALSE, store_pca =
 #' @return a ggplot of the null distribution of F-statistic and observed
 #'   F-statistic from PCA permutation testing. If PCAs are present, also
 #'   optionally includes plots of the observed PCA and n number of permuted
-#'   PCAs.
+#'   PCAs. PCAs for observed data will have a gray background, PCAs for
+#'   permutations will not.
 #'
 #'
 #' @author William Hemstrom
@@ -179,18 +180,27 @@ plot_permutation_res <- function(permute_res, n_perm_pcas = 1, plot_observed_pca
     bp[[i]] <- plot_pca(permute_res$null_pca[[use[i]]]$all_vars, permute_res$null_pca[[use[i]]]$selected) + ggplot2::guides(color = "none")
   }
   if(plot_observed_pcas){
-    top <- cowplot::plot_grid(plotlist = c(list(pca_real +
+    left <- cowplot::plot_grid(plotlist = c(list(pca_real +
                                                   ggplot2::guides(color = "none") +
                                                   ggplot2::theme(plot.background = ggplot2::element_rect(color = "lightgrey", fill = "lightgrey"))),
-                                           bp),
-                              nrow = length(bp) + 1)
+                                           bp,
+                                           list(dist_plot)),
+                              nrow = length(bp) + 2,
+                              align = "vh",
+                              axis = "l")
   }
   else{
-    top <- cowplot::plot_grid(plotlist = bp, nrow = length(bp))
+    left <- cowplot::plot_grid(plotlist = c(bp, list(dist_plot)), nrow = length(bp) + 1,
+                               align = "vh",
+                               axis = "l")
   }
 
-  top <- cowplot::plot_grid(top, ggpubr::get_legend(pca_real), nrow = 1, rel_widths = c(.9, .1))
-  return(cowplot::plot_grid(top, dist_plot, nrow = 2, rel_heights = c(1*((n_perm_pcas + 1)/(n_perm_pcas + 2)),
-                                                                      1*(1/(n_perm_pcas + 2)))))
+
+  final <- cowplot::plot_grid(left, cowplot::plot_grid(ggpubr::get_legend(pca_real),
+                                              ggplot2::ggplot() + ggplot2::theme_void(),
+                                              ncol = 1, rel_heights = c(length(bp)/(length(bp) + 1),
+                                                                        1/(length(bp) + 1))),
+                              nrow = 1, rel_widths = c(.9, .1))
+  return(final)
 
 }

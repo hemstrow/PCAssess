@@ -43,6 +43,12 @@ test_that("check errors and options", {
                                facet = sample(LETTERS[1:4], ncol(mon_sn), TRUE),
                                n = 10, fst_cut = 1.05),
                regexp = "Fst cut-off must be between 0 and 1")
+
+  # one facet level should error
+  expect_error(run_permutation(mon_sn[1:100,],
+                               facet = rep("A", ncol(mon_sn)),
+                               n = 10, fst_cut = .95),
+               regexp = "There must be at least two unique values")
   # TODO: add reporting for the number of SNPs maintained (verbose argument to generate_summary_stats?), test that it is correct
   # TODO: add a sanity check to run_permutation that checks that the fst_cut will actually retain some SNPs (cut = .9999 with 10 SNPs will eliminate all?)
   # run_permutation(mon_sn[1:100,],
